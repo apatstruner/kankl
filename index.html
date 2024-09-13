@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kankl</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #b30000;
+        }
+
+        #grid {
+            display: grid;
+            grid-template-rows: repeat(6, 50px);
+            grid-gap: 10px;
+            width: 300px;
+            margin: 20px auto;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #aaa;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            background-color: #fff;
+        }
+
+        .correct {
+            background-color: darkred;
+            color: white;
+        }
+
+        .present {
+            background-color: #ff6600;
+            color: white;
+        }
+
+        .absent {
+            background-color: gray;
+            color: white;
+        }
+
+        #guessInput {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 18px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #b30000;
+            color: white;
+            border: none;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #b30000;
+        }
+    </style>
+</head>
+<body>
+<h1>Kankl</h1>
+<div id="grid">
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+</div>
+<div id="message"></div>
+<input type="text" id="guessInput" maxlength="6" placeholder="Voer je gok in">
+<button onclick="submitGuess()">Indienen</button>
+
+<script>
+    const secretWord = "kanker";
+    let currentRow = 0;
+
+    function submitGuess() {
+        const input = document.getElementById("guessInput").value.toLowerCase();
+        if (input.length !== 6) {
+            document.getElementById("message").textContent = "Voer een woord van 6 letters in.";
+            return;
+        }
+
+        const grid = document.querySelectorAll(".row")[currentRow];
+        for (let i = 0; i < 6; i++) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.textContent = input[i];
+
+            if (input[i] === secretWord[i]) {
+                cell.classList.add("correct");
+            } else if (secretWord.includes(input[i])) {
+                cell.classList.add("present");
+            } else {
+                cell.classList.add("absent");
+            }
+
+            grid.appendChild(cell);
+        }
+
+        if (input === secretWord) {
+            document.getElementById("message").textContent = "Gefeliciteerd! Je hebt het geraden!";
+            document.getElementById("guessInput").disabled = true;
+        } else if (currentRow === 5) {
+            document.getElementById("message").textContent = "Game over! Het woord was 'kanker'.";
+            document.getElementById("guessInput").disabled = true;
+        }
+
+        currentRow++;
+        document.getElementById("guessInput").value = "";
+    }
+</script>
+</body>
+</html>
